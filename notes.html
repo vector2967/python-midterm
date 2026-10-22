@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>중간고사 정리노트</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐍</text></svg>">
+<link rel="stylesheet" href="style.css">
+<script src="common.js"></script>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><i>Py</i><span>중간고사 대비</span></a>
+  <a class="tab" href="index.html">홈</a>
+  <a class="tab on" href="notes.html">정리노트</a>
+  <a class="tab" href="cram.html">암기노트</a>
+  <a class="tab" href="quiz.html">문제은행</a>
+  <button class="theme-btn" aria-label="테마 전환">🌙</button>
+</div></nav>
+
+<div class="page-head">
+  <div class="emoji">📘</div>
+  <h1>정리노트</h1>
+  <p>강의자료 순서대로. 코드 → 결과 → 주의점.</p>
+</div>
+
+<div class="doc">
+<aside class="toc">
+  <b>목차</b>
+  <a href="#print">1. print와 출력 서식</a>
+  <a class="sub" href="#naming">명명 규칙</a>
+  <a class="sub" href="#print-args">sep · end · file</a>
+  <a class="sub" href="#fmt">% · format · f-string</a>
+  <a href="#oddeven">2. 홀짝 합계 · 기초</a>
+  <a class="sub" href="#oe-methods">6가지 풀이</a>
+  <a class="sub" href="#oe-bugs">흔한 버그</a>
+  <a class="sub" href="#errors">오류 3종류</a>
+  <a class="sub" href="#debug">디버깅 툴킷</a>
+  <a href="#basics">3. 기본 문법 복습</a>
+  <a class="sub" href="#types">자료형</a>
+  <a class="sub" href="#ops">연산자</a>
+  <a class="sub" href="#ctrl">조건 · 반복</a>
+  <a class="sub" href="#func">함수</a>
+  <a class="sub" href="#ds">자료구조</a>
+  <a href="#file">7장 파일과 예외</a>
+  <a class="sub" href="#f-open">열기 · 읽기 · 쓰기</a>
+  <a class="sub" href="#f-text">줄 · 단어 · 문자 · 레코드</a>
+  <a class="sub" href="#f-argv">명령행 인자 · 이진</a>
+  <a class="sub" href="#ex">예외 처리</a>
+  <a class="sub" href="#ex-app">입력 오류 처리</a>
+  <a href="#class">9장 객체와 클래스</a>
+  <a class="sub" href="#c-oop">OOP · 캡슐화</a>
+  <a class="sub" href="#c-counter">Counter</a>
+  <a class="sub" href="#c-init">생성자 · 메소드</a>
+  <a class="sub" href="#c-design">설계 7단계</a>
+  <a class="sub" href="#c-pattern">객체 데이터 패턴</a>
+  <a class="sub" href="#c-ref">객체 참조</a>
+  <a class="sub" href="#c-frac">Fraction · 특별 메소드</a>
+  <a href="#inherit">10장 상속</a>
+  <a class="sub" href="#i-basic">상속 계층</a>
+  <a class="sub" href="#i-sub">하위 클래스 · super()</a>
+  <a class="sub" href="#i-override">오버라이드</a>
+  <a class="sub" href="#i-poly">다형성</a>
+  <a class="sub" href="#i-howto">계층 작성 예제</a>
+  <a class="sub" href="#i-shape">도형 계층</a>
+</aside>
+
+<article class="prose">
+
+<!-- ======================= 1 ======================= -->
+<h2 id="print">1. print와 출력 서식 <span class="tag">1주</span></h2>
+<p class="lead">python_print.pdf</p>
+
+<h3 id="naming">명명 규칙 (Naming Convention)</h3>
+<div class="tbl"><table>
+<tr><th>이름</th><th>형태</th><th>용도</th></tr>
+<tr><td>플랫 케이스</td><td><code>mainmenubutton</code></td><td>URL 경로</td></tr>
+<tr><td>카멜 케이스</td><td><code>mainMenuButton</code></td><td>JavaScript·Java 변수/함수 (첫 단어 소문자)</td></tr>
+<tr><td>파스칼 케이스</td><td><code>MainMenuButton</code></td><td><b>클래스 이름</b> (모든 단어 첫 글자 대문자)</td></tr>
+<tr><td>스네이크 케이스</td><td><code>main_menu_button</code></td><td><b>파이썬 변수/함수</b>, DB 필드</td></tr>
+<tr><td>케밥 케이스</td><td><code>main-menu-button</code></td><td>HTML/CSS 클래스·ID</td></tr>
+<tr><td>헝가리안 표기법</td><td><code>strName, intAge</code></td><td>타입 접두사. 옛 C 시절, 지금은 거의 안 씀</td></tr>
+<tr><td>스크리밍 스네이크</td><td><code>MAX_VALUE</code></td><td><b>상수</b> 표준</td></tr>
+<tr><td>스크리밍 케밥</td><td><code>MAX-VALUE</code></td><td>코드 내 사용 불가(빼기로 오인), 설정 파일용</td></tr>
+</table></div>
+
+<h3 id="print-args">print 기본과 sep · end · file</h3>
+<pre>print('Hello "Python"')      # 작은따옴표 안에 큰따옴표 → Hello "Python"
+print("Hello 'Python'")      # 큰따옴표 안에 작은따옴표 → Hello 'Python'
+print('Hello', 'Python!')    # 콤마 → 공백 자동 추가 → Hello Python!
+print('Hello''Python!')      # 붙여 쓰기 → HelloPython! (공백 없음)
+print('Hello', end=' ')      # end 기본값 '\n'
+print('Python')              # → Hello Python
+print('Hello', end='&&&'); print('Python')   # → Hello&&&Python
+print('Hello', 'Python', sep='#')            # sep 기본값 ' ' → Hello#Python</pre>
+<ul>
+<li><code>\</code>로 긴 문자열을 여러 줄에 작성 가능 (<b>\ 뒤에는 공백 포함 아무 문자도 오면 안 됨</b>). 출력은 한 줄로 이어짐.</li>
+<li><code>'''…'''</code> / <code>"""…"""</code> (multiple line string): 줄바꿈·공백을 <b>입력한 그대로</b> 출력.</li>
+<li><code>file=</code> 인자: 파일(<code>open('dump.txt','w')</code>)이나 <code>sys.stderr</code>로 출력. 모드 <code>w</code>=write, <code>a</code>=append.</li>
+</ul>
+
+<h3 id="fmt">% 서식 · format() · f-string</h3>
+<pre>i, f, s = 123, 3.14, 'Hello'
+print('i: %d, f: %f, s: %s' % (i, f, s))      # i: 123, f: 3.140000, s: Hello
+print('i: %9d, f: %5.2f, s: %7s' % (i, f, s)) # i:       123, f:  3.14, s:   Hello
+print('i: %09d, f: %05.2f' % (i, f))          # i: 000000123, f: 03.14
+
+print('i: {}, f: {}'.format(i, f))            # 순서대로
+print('f: {1}, i: {0}'.format(i, f))          # 인덱스 (0부터)
+print('f: {ff}, i: {ii}'.format(ii=i, ff=f))  # 이름</pre>
+<div class="callout key"><span>📌</span><div><code>%d</code> 정수 · <code>%f</code> 실수(기본 소수점 6자리) · <code>%s</code> 문자열. <code>%5.2f</code> = <b>전체 폭 5, 소수점 2자리</b>. 앞에 <code>0</code> 붙이면 빈칸을 0으로 채움. <code>%-20s</code>는 왼쪽 정렬.</div></div>
+<pre>x, y = 1, 2
+print(f"{x}+{y}는 {x+y}입니다.")   # 1+2는 3입니다.
+print(f"{x=}, {y=}")              # x=1, y=2
+pi = 3.141592653589793
+print(f"{pi:.2f}")      # 3.14
+print(f"{pi:10.2f}")    # '      3.14' (폭 10, 숫자는 기본 오른쪽 정렬)
+print(f"{pi:<10.2f}")   # '3.14      ' (왼쪽 정렬)
+print(f"{1234567.8912:,.2f}")  # 1,234,567.89 (천 단위 콤마)
+s = "Python"
+print(f"{len(s)} {s[:2]} {s[::-1]}")  # 6 Py nohtyP
+N = 255
+print(f"{N:b} {N:o} {N:x} {N:X}")     # 11111111 377 ff FF</pre>
+<ul>
+<li>날짜: <code>f"{date.today():%Y-%m-%d}"</code>, 시간: <code>f"{now:%H시 %M분 %S초}"</code> (<code>from datetime import date, datetime</code>)</li>
+</ul>
+
+<h3>이스케이프 문자 · 문자열 메소드</h3>
+<pre>print('My mother\'s house')   # My mother's house
+# \n 줄바꿈, \t 탭, \\ 백슬래시, \' \" 따옴표
+'Hello Python!'.center(20)   # 가운데 정렬 (폭 20)
+'Hello Python!'.rjust(20)    # 오른쪽 정렬
+'Hello Python!'.ljust(20)    # 왼쪽 정렬
+'Hello Python!'.zfill(20)    # 0000000Hello Python!  (앞을 0으로)
+'hello python!'.capitalize() # Hello python!  (첫 글자만 대문자)
+'hello python!'.upper()      # HELLO PYTHON!
+'HELLO'.lower()              # hello</pre>
+
+<!-- ======================= 2 ======================= -->
+<h2 id="oddeven">2. 홀짝 합계와 프로그래밍 기초 <span class="tag">2주</span></h2>
+<p class="lead">Week2_홀수,짝수합.pdf — 문제: 1~100의 홀수 합(2500)과 짝수 합(2550)</p>
+
+<h3 id="oe-methods">여러 가지 풀이</h3>
+<div class="tbl"><table>
+<tr><th>방법</th><th>아이디어</th><th>반복문 수</th><th>시간</th></tr>
+<tr><td>1. 단일 for + if</td><td>한 번 순회하며 두 합을 동시에 누적. <code>odd_sum = total - even_sum</code>으로도 가능</td><td>1</td><td>O(n)</td></tr>
+<tr><td>2. range(step) 두 개</td><td><code>range(2,101,2)</code>, <code>range(1,101,2)</code> — if 불필요</td><td>2</td><td>O(n)</td></tr>
+<tr><td>3. 등차수열 공식</td><td><code>n*(n+1)//2</code> — 반복문 없음</td><td>0</td><td><b>O(1)</b></td></tr>
+<tr><td>4/5. 리스트 컴프리헨션</td><td>필터링(길이 줄어듦) / 마스킹(조건 밖은 0, 길이 유지)</td><td>1(암묵적)</td><td>O(n)</td></tr>
+<tr><td>6. 객체지향</td><td>입력(<code>__init__</code>)·처리(calculate_sums)·출력(display_results) 분리</td><td>1(암묵적)</td><td>O(n)</td></tr>
+</table></div>
+<pre>n = 100
+total = n * (n + 1) // 2           # 5050
+even_sum = 2 * (50 * 51 // 2)      # 2+4+...+100 = 2(1+...+50) = 2550
+odd_sum = total - even_sum         # 2500
+
+even_sum = sum([i for i in nums if i % 2 == 0])              # 필터링
+even_masked = [i if i % 2 == 0 else 0 for i in range(1, 101)] # 마스킹</pre>
+<p>일반화: 100을 하드코딩하지 말고 <code>def sum_odd_even_formula(n)</code>처럼 매개변수로. 반복문 버전과 공식 버전의 결과가 일치하는 것 자체가 정확성 검증. <code>timeit</code>으로 측정하면 n이 10,000배 → loop 시간도 약 10,000배(O(n)), formula는 거의 그대로(O(1)).</p>
+
+<h3 id="oe-bugs">흔한 버그와 함정</h3>
+<ol>
+<li><b>경계값(off-by-one)</b>: <code>range(1, 100)</code>은 100을 포함하지 않는다.</li>
+<li><b>= vs ==</b>: 대입과 비교 혼동.</li>
+<li><b>누적 변수 초기화 누락</b>: 이전 값이 결과를 오염.</li>
+<li><b>/ vs //</b>: <code>100 / 2 → 50.0</code>(항상 float), <code>//</code>는 몫(int).</li>
+</ol>
+<div class="callout warn"><span>⚠️</span><div>이 버그들은 모두 프로그램이 <b>멈추지 않고</b> 실행된다 → 문법 오류가 아닌 논리·의미 오류라서 위험.</div></div>
+
+<h3>프로그램의 삼요소 · 구조</h3>
+<ul>
+<li><b>삼요소</b>: 문법(Syntax) · 알고리즘(Algorithm) · 디버깅(Debugging)</li>
+<li><b>구조</b>: 입력 → 처리 → 출력. 권장 학습 순서: 처리 → 입력 → 출력</li>
+<li>기본 문법 요소: 자료형 · 연산자 · 제어문 · 함수</li>
+<li>내장 함수(import 없이): <code>len, sum, range, print, sorted</code>. 외부 라이브러리: numpy, pandas</li>
+<li>프로그램 골격: 클래스/함수 정의 → <code>main()</code> → <code>if __name__ == "__main__": main()</code> (파일이 <b>직접 실행될 때만</b> main 실행)</li>
+</ul>
+
+<h3 id="errors">오류의 3종류</h3>
+<div class="tbl"><table>
+<tr><th>유형</th><th>설명</th><th>예</th></tr>
+<tr><td>문법 오류 (Syntax)</td><td>문법 위반, 아예 실행 안 됨</td><td><code>if a > b</code> (콜론 누락)</td></tr>
+<tr><td>논리 오류 (Logical)</td><td>실행되지만 로직에 결함</td><td><code>&gt;=</code> 대신 <code>&gt;</code></td></tr>
+<tr><td>의미 오류 (Semantic)</td><td>문법은 맞지만 의도와 다른 의미</td><td><code>if data = 100:</code> (대입/비교 혼동)</td></tr>
+</table></div>
+
+<h3>연산자 · 제어 흐름 · 함수 심화</h3>
+<ul>
+<li>우선순위: <code>**</code> &gt; <code>* / // %</code> &gt; <code>+ -</code>. <code>2 + 3 * 4 == 14</code></li>
+<li>연쇄 비교 <code>1 &lt; x &lt; 10</code> = <code>(1 &lt; x) and (x &lt; 10)</code></li>
+<li><b><code>-7 % 3 == 2</code></b>: 파이썬 %는 <b>제수(나누는 수)와 같은 부호</b></li>
+<li>for-else: <b>break 없이</b> 끝났을 때만 else 실행</li>
+<li><code>global count</code>가 없으면 함수 안의 <code>count += 1</code>은 지역 변수로 취급되어 오류</li>
+<li><code>input()</code>은 항상 문자열 → <code>int()</code> 변환 필요. <code>with</code>문은 오류가 나도 파일을 자동으로 닫음</li>
+</ul>
+
+<h3>코드 스타일 (PEP 8)</h3>
+<ul>
+<li>변수·함수: <code>snake_case</code> / 클래스: <code>PascalCase</code> / 들여쓰기: 공백 4칸, 탭 금지</li>
+<li>독스트링 = 함수가 <b>무엇을</b> 하는지, 주석 = 그 줄이 <b>왜</b> 있는지</li>
+</ul>
+
+<h3 id="debug">디버깅 툴킷</h3>
+<ol>
+<li>트레이스백은 <b>아래에서 위로</b> 읽는다 (맨 아래에 파일·줄·오류 유형)</li>
+<li>print 디버깅</li>
+<li><code>assert sum_odd_even_loop(100) == (2500, 2550), "메시지"</code> — 조건이 거짓이면 멈춤</li>
+<li><code>breakpoint()</code> — 대화형 디버거로 한 줄씩</li>
+</ol>
+
+<!-- ======================= 3 ======================= -->
+<h2 id="basics">3. 기본 문법 복습 <span class="tag">3주</span></h2>
+<p class="lead">Week3_기본문법정리_ver3.pdf</p>
+
+<h3 id="types">자료형</h3>
+<ul>
+<li><code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>. <b>동적 타이핑</b>: 타입 선언 없이 값으로 결정, <code>type()</code>으로 확인</li>
+<li>int와 float를 연산하면 결과는 <b>float</b></li>
+<li>bool은 내부적으로 0/1: <code>int(True) → 1</code>, <code>bool(0) → False</code></li>
+<li>형변환: <code>int("42")</code>, <code>float("3.14")</code>, <code>str(100)</code></li>
+</ul>
+<pre>greeting = 'Hello, ' + 'Python' + '!'
+len(greeting)       # 14
+greeting[0:5]       # 'Hello'
+" Hello World ".strip()          # 'Hello World'
+" Hello World ".split()          # ['Hello', 'World']
+"Hello World".replace("World", "Python")</pre>
+<div class="callout key"><span>📌</span><div><b>가변(mutable)</b>: list, dict, set — 생성 후 내용 변경 가능<br><b>불변(immutable)</b>: int, float, str, tuple, bool — <code>s[0] = "H"</code> → TypeError</div></div>
+<pre>a = [1, 2, 3]
+b = a          # 같은 리스트를 가리킴
+b.append(4)
+print(a)       # [1, 2, 3, 4]  ← a도 바뀜!
+x = 5; y = x; y += 1
+print(x, y)    # 5 6  ← int는 불변이라 영향 없음</pre>
+
+<h3 id="ops">연산자</h3>
+<pre>a, b = 7, 2
+a / b    # 3.5  (항상 float)
+a // b   # 3    (몫)
+a % b    # 1    (나머지)
+a ** b   # 49   (거듭제곱)</pre>
+<ul>
+<li>비교 연산 결과는 항상 bool. 논리: <code>and</code>(둘 다), <code>or</code>(하나라도), <code>not</code>(반전)</li>
+<li>복합 대입: <code>count += 1</code> = <code>count = count + 1</code></li>
+</ul>
+
+<h3 id="ctrl">조건문 · 반복문</h3>
+<ul>
+<li>if: 콜론(:)과 들여쓰기(4칸) 필수. elif는 <b>앞 조건이 True면 나머지를 검사하지 않음</b></li>
+<li>윤년: <code>(year % 4 == 0 and year % 100 != 0) or year % 400 == 0</code></li>
+<li><code>range(start, stop, step)</code>: stop은 <b>포함 안 됨</b>. <code>range(0,10,2)</code> → 0 2 4 6 8</li>
+<li>while: 조건을 바꾸는 코드를 빠뜨리면 무한 루프</li>
+<li><b>break</b> = 반복문 완전 종료 / <b>continue</b> = 이번 반복만 건너뜀</li>
+<li><code>"*" * 3</code> → <code>'***'</code></li>
+</ul>
+<pre>for i in range(1, 11):
+    if i == 5:
+        break
+    if i % 2 == 0:
+        continue
+    print(i)       # 1 3
+
+for n in range(2, 10):
+    if n % 7 == 0:
+        print(n, "은 7의 배수"); break
+else:
+    print("못 찾음")   # break 없이 끝났을 때만</pre>
+
+<h3 id="func">함수</h3>
+<pre>def greet(name, greeting="안녕하세요"):   # 기본값 매개변수
+    print(f"{greeting}, {name}님!")
+
+def total_of(*numbers):      # *args → 튜플
+    return sum(numbers)
+def print_info(**info):      # **kwargs → 딕셔너리
+    for k, v in info.items(): print(k, ":", v)
+
+def min_max(nums):
+    return min(nums), max(nums)   # 여러 값 → 튜플로 반환
+lo, hi = min_max([3, 1, 4])        # 1, 4
+
+def factorial(n):
+    if n &lt;= 1: return 1            # 종료 조건(base case) 필수
+    return n * factorial(n - 1)    # factorial(5) = 120</pre>
+<ul><li>함수 안 변수 = 지역 변수. 전역 변수를 <b>수정</b>하려면 <code>global</code></li></ul>
+
+<h3 id="ds">자료구조</h3>
+<div class="tbl"><table>
+<tr><th>자료형</th><th>순서</th><th>중복</th><th>변경</th><th>표기</th></tr>
+<tr><td>list</td><td>있음</td><td>허용</td><td>가능</td><td><code>[ ]</code></td></tr>
+<tr><td>tuple</td><td>있음</td><td>허용</td><td><b>불가능</b></td><td><code>( )</code></td></tr>
+<tr><td>set</td><td><b>없음</b></td><td><b>불허</b></td><td>가능</td><td><code>{ }</code></td></tr>
+<tr><td>dict</td><td>있음*</td><td>키 불허</td><td>가능</td><td><code>{k: v}</code></td></tr>
+</table></div>
+<p>* 딕셔너리는 파이썬 3.7부터 입력 순서 유지.</p>
+<pre>fruits[-1]                  # 마지막 원소
+nums = [3, 1, 4, 1, 5]
+nums.sort()                 # [1, 1, 3, 4, 5]  원본 변경
+nums.remove(1)              # 첫 번째 1만 제거 → [1, 3, 4, 5]
+nums = list(range(1, 11))
+nums[2:5]                   # [3, 4, 5]
+nums[::2]                   # [1, 3, 5, 7, 9]
+[n**2 for n in nums if n % 2 == 0]   # [4, 16, 36, 64, 100]
+
+a, b = {1, 2, 3}, {2, 3, 4}
+a | b   # {1, 2, 3, 4} 합집합
+a &amp; b   # {2, 3}       교집합
+a - b   # {1}          차집합
+
+d = {"name": "영희", "age": 20}
+d["grade"] = "A"            # 새 키 추가
+d.get("major", "미지정")     # 없는 키 → 기본값 (오류 없음)
+count[w] = count.get(w, 0) + 1   # 빈도수 세기 패턴</pre>
+
+<!-- ======================= 7 ======================= -->
+<h2 id="file">7장 파일 입출력과 예외 처리 <span class="tag o">교재 7장</span></h2>
+<p class="lead">Week7. 파일입출력과예외처리_ver3.pdf</p>
+
+<h3 id="f-open">파일 열기 · 읽기 · 쓰기</h3>
+<pre>infile = open("input.txt", "r")    # 읽기: 파일이 반드시 존재해야 함
+outfile = open("output.txt", "w")  # 쓰기: 기존 내용 지워짐
+infile.close(); outfile.close()    # 반드시 닫기
+
+with open("test.txt", "r") as f:   # 블록이 끝나면(예외로 끝나도) 자동 close
+    for line in f:
+        print(line.rstrip())</pre>
+<ul>
+<li><code>readline()</code>: 다음 한 줄을 문자열로(<b>\n 포함</b>). <b>EOF면 빈 문자열 <code>""</code></b>. 숫자는 <code>int()/float()</code>로 변환</li>
+<li>파일은 한 번 끝까지 읽으면 <b>닫고 다시 열기 전까지 재반복 불가</b></li>
+<li><code>write()</code>: <b>문자열 하나만</b>, 줄바꿈 자동 추가 <b>안 함</b>. <code>print(x, file=outfile)</code>도 가능</li>
+<li>Windows 경로: <code>"c:\\homework\\input.txt"</code> 또는 <b>r-string</b> <code>r"c:\homework\input.txt"</code></li>
+</ul>
+<pre>line = infile.readline()
+while line != "":
+    value = float(line)
+    ...
+    line = infile.readline()</pre>
+<div class="tbl"><table>
+<tr><th>메소드</th><th>반환</th><th>"I love you.\nDo you love me?"</th></tr>
+<tr><td><code>read()</code></td><td>전체를 문자열 하나로</td><td><code>"I love you.\nDo you love me?"</code></td></tr>
+<tr><td><code>read(n)</code></td><td>n개 문자, EOF면 ""</td><td><code>read(1)</code> → <code>"I"</code></td></tr>
+<tr><td><code>readline()</code></td><td>한 줄</td><td><code>"I love you.\n"</code></td></tr>
+<tr><td><code>readlines()</code></td><td>줄 단위 리스트</td><td><code>['I love you.\n', 'Do you love me?']</code></td></tr>
+</table></div>
+<p>readlines()/read()는 전체를 메모리에 올리므로 큰 파일엔 부적합 → <code>for line in infile:</code>.</p>
+
+<h3 id="f-text">줄 · 단어 · 문자 · 레코드</h3>
+<ul>
+<li><code>print(line)</code>하면 line의 \n + print의 \n → <b>빈 줄이 하나씩 더</b> 생김 → <code>rstrip()</code></li>
+<li><code>"James \n".rstrip("\n")</code> → <code>"James "</code> (공백은 남음). 인자 생략 시 공백·탭·개행 제거</li>
+<li><code>split()</code>(인자 없음): 공백 기준, <b>연속 공백은 하나로</b> 처리. <code>split(":")</code>처럼 sep 지정 시 연속 구분자는 빈 문자열 생김</li>
+<li><code>"United States 303824646".rsplit(" ", 1)</code> → <code>["United States", "303824646"]</code> (오른쪽에서 1번만)</li>
+<li><code>splitlines()</code>: \n 기준 분리</li>
+<li>문자 단위: <code>read(1)</code>, <code>ord("A")</code> → 65, <code>chr(65)</code> → "A"</li>
+<li>레코드: 한 줄+구분자면 <code>line.split(":")</code>, 필드가 여러 줄이면 <code>readline()</code>을 필드 수만큼</li>
+<li><code>"%-20s%10.2f\n" % (item, price)</code>: 품목 왼쪽 정렬 20칸, 가격 오른쪽 정렬 10칸</li>
+<li>인코딩: <code>open("f.txt", "r", encoding="utf-8")</code></li>
+</ul>
+
+<h4>HOW TO 7.1 — 텍스트 파일 처리 6단계</h4>
+<ol>
+<li>작업 이해 (수동으로 가능한지) 2. 읽고 쓸 파일 결정 3. 파일 이름 얻는 방법(하드코딩/input/명령행) 4. 전체 반복 vs 개별 행 읽기 5. 행에서 데이터 추출(split/rsplit) 6. 반복 작업은 함수로</li>
+</ol>
+
+<h3 id="f-argv">명령행 인자 · 이진 파일 (참고)</h3>
+<pre>python program.py -v input.dat
+from sys import argv
+# argv[0] = "program.py"  (항상 스크립트 이름)
+# argv[1] = "-v"          (실제 인자는 1번부터)
+# argv[2] = "input.dat"</pre>
+<ul>
+<li>이진 파일: <code>"rb"</code> 읽기, <code>"wb"</code> 쓰기. 바이트(0~255)로 저장 (이미지·사운드)</li>
+<li>순차 접근 vs 임의 접근: <code>f.seek(pos)</code> 위치 이동, <code>f.tell()</code> 현재 위치</li>
+<li>os 모듈: <code>getcwd, chdir, listdir, path.exists, path.isfile/isdir</code>, <code>shutil.copy</code></li>
+</ul>
+
+<h3 id="ex">예외 처리</h3>
+<p>오류 대응 = <b>감지(detection)</b> + <b>처리(handling)</b>. 예: <code>open()</code>은 없는 파일을 감지하지만 어떻게 처리할지는 모름 → 처리기(handler)로 제어권 전달.</p>
+<pre>Exception
+ ├─ ArithmeticError → OverflowError, ZeroDivisionError
+ ├─ RuntimeError
+ ├─ TypeError / ValueError
+ ├─ LookupError → IndexError, KeyError
+ └─ EnvironmentError → IOError</pre>
+<pre>if amount > balance:
+    raise ValueError("Amount exceeds balance")   # 예외 발생
+balance = balance - amount   # 예외가 나면 실행 안 됨
+
+try:
+    infile = open(filename, "r")
+    value = int(infile.readline())
+except IOError:
+    print("Error: file not found.")
+except ValueError as exception:          # as로 예외 객체 받기
+    print("Error:", str(exception))</pre>
+<ul>
+<li>try 안에서 예외 발생 → <b>나머지 문장 건너뛰고</b> 맞는 except로. 처리되지 않으면 호출자로 계속 <b>전파(propagate)</b></li>
+<li>except가 여러 개면 <b>구체적인 예외를 먼저</b></li>
+<li><b>finally</b>: 예외 여부와 무관하게 <b>항상 실행</b> (파일 닫기 등 정리)</li>
+<li>Tip 7.1: <b>문제 제기는 일찍, 처리는 늦게</b> — 해결할 수 있는 곳에서만 except</li>
+<li>Tip 7.2: <b>같은 try에 except와 finally를 함께 쓰지 말 것</b> → 바깥 try/except + 안쪽 try/finally</li>
+</ul>
+<pre>try:
+    outfile = open(filename, "w")
+    try:
+        ...                      # 쓰기
+    finally:
+        outfile.close()
+except IOError:
+    ...                          # 처리</pre>
+<div class="callout key"><span>📌</span><div><b>실행 순서</b>: try → (예외 시) except → (예외 없을 때만) else → (무조건) finally</div></div>
+<pre>class MyError(Exception):        # 사용자 정의 예외: Exception 상속
+    pass
+raise MyError("음수는 허용되지 않습니다!")
+
+import logging                   # 오류를 파일로 기록
+logging.basicConfig(filename='error_log.txt', level=logging.ERROR)
+logging.error(f"예상치 못한 에러: {e}")</pre>
+
+<h3 id="ex-app">7.6 응용: 입력 오류 처리 (analyzedata.py)</h3>
+<div class="tbl"><table>
+<tr><th>잘못될 수 있는 것</th><th>예외</th></tr>
+<tr><td>파일이 없음</td><td><code>open()</code> → IOError</td></tr>
+<tr><td>첫 줄이 정수가 아님 / 데이터가 숫자 아님</td><td><code>int()/float()</code> → ValueError</td></tr>
+<tr><td>데이터가 예상보다 적음</td><td>readline()이 "" → 변환 시 ValueError</td></tr>
+<tr><td>데이터가 예상보다 많음</td><td>표준 예외 없음 → 직접 <code>raise RuntimeError</code></td></tr>
+</table></div>
+<pre>def readFile(filename):
+    infile = open(filename, "r")
+    try:
+        return readData(infile)
+    finally:
+        infile.close()           # 처리 X, 닫기만
+
+def readData(infile):            # 감지만, 처리 X (그냥 전파)
+    n = int(infile.readline())
+    data = []
+    for i in range(n):
+        data.append(float(infile.readline()))
+    if infile.readline() != "":
+        raise RuntimeError("End of file expected.")
+    return data
+# main(): while not done: try ... except IOError / ValueError / RuntimeError → 재입력</pre>
+<p>전파 시나리오: main → readFile → readData → int()가 ValueError → readData 즉시 탈출 → readFile은 finally만 실행하고 탈출 → main의 except IOError는 불일치 → except ValueError 실행 → 다시 입력받음.</p>
+
+<!-- ======================= 9 ======================= -->
+<h2 id="class">9장 객체와 클래스 <span class="tag o">교재 9장</span></h2>
+<p class="lead">Week5_Chapter 9. 클래스.pdf</p>
+
+<h3 id="c-oop">OOP와 캡슐화</h3>
+<ul>
+<li><b>OOP</b>: 상호 협동하는 객체로 작업을 조직. 객체 = 자신의 데이터 + 메소드</li>
+<li><b>클래스</b>: 동일한 동작 특성을 갖는 객체들의 집합을 기술하는 설계도</li>
+<li><b>공용 인터페이스</b>: 클래스가 제공하는 모든 메소드의 집합. <code>"Hi".upper()</code> OK, <code>["Hi"].upper()</code> 오류</li>
+<li><b>캡슐화</b>: 공용 인터페이스는 제공하고 구현 세부(데이터 저장 방식, 메소드 구현)는 숨김 → 사용자에게 영향 없이 구현 수정 가능</li>
+</ul>
+<div class="tbl"><table>
+<tr><th>구분</th><th>절차지향</th><th>객체지향</th></tr>
+<tr><td>중심 단위</td><td>함수</td><td>객체</td></tr>
+<tr><td>데이터와 기능</td><td>분리</td><td>결합(캡슐화)</td></tr>
+<tr><td>재사용</td><td>함수 단위</td><td>클래스 상속</td></tr>
+<tr><td>예</td><td>C</td><td>Java, C++, Python</td></tr>
+</table></div>
+
+<h3 id="c-counter">Counter 클래스</h3>
+<pre>class Counter:
+    def getValue(self):
+        return self._value
+    def click(self):
+        self._value = self._value + 1
+    def reset(self):
+        self._value = 0
+
+tally = Counter()       # 객체 생성
+tally.reset(); tally.click(); tally.click()
+tally.getValue()        # 2   — 객체는 상태(state)를 기억</pre>
+<ul>
+<li><b>인스턴스 변수</b>: 객체마다 독립적인 데이터 (<code>self._value</code>). 관례상 <b>밑줄(_)</b> = private (파이썬이 강제하지는 않음)</li>
+<li>메소드의 첫 파라미터는 반드시 <b>self</b>. <code>tally.click()</code> 호출 시 self = tally (자동 전달)</li>
+<li>인스턴스 변수는 선언하지 않고 처음 할당할 때 생성됨</li>
+</ul>
+
+<h3 id="c-init">CashRegister — 생성자와 메소드</h3>
+<ul>
+<li><b>설정자(mutator)</b>: 객체를 수정 → <code>addItem, clear</code></li>
+<li><b>접근자(accessor)</b>: 수정 없이 정보만 → <code>getTotal, getCount</code></li>
+<li>메소드 헤더+주석 = 공용 인터페이스 / 데이터+메소드 본문 = private 구현</li>
+<li>데이터 표현은 접근자부터 분석하면 쉬움</li>
+</ul>
+<pre>class CashRegister:
+    def __init__(self):              # 생성자: 객체 생성 시 자동 호출
+        self._itemCount = 0
+        self._totalPrice = 0.0
+    def addItem(self, price):
+        self._itemCount = self._itemCount + 1
+        self._totalPrice = self._totalPrice + price
+    def getTotal(self):
+        return self._totalPrice
+    def getCount(self):
+        return self._itemCount
+    def clear(self):
+        self._itemCount = 0
+        self._totalPrice = 0.0
+
+class BankAccount:
+    def __init__(self, initialBalance=0.0):   # 디폴트 인자
+        self._balance = initialBalance
+a = BankAccount()        # 0.0
+b = BankAccount(499.95)  # 499.95</pre>
+<div class="callout key"><span>📌</span><div>생성자 이름은 <code>__init__</code>, 첫 파라미터 self, <b>클래스당 하나만</b> 정의 가능.</div></div>
+<div class="callout warn"><span>⚠️</span><div><b>Common Error 9.1</b>: <code>register1.__init__()</code>처럼 생성자를 직접 다시 호출하지 말 것 → <code>register1 = CashRegister()</code>로 새 객체로 대체.<br><b>Tip 9.1</b>: 모든 인스턴스 변수는 private, 모든 메소드는 public.<br><b>Tip 9.2</b>: 인스턴스 변수는 <b>생성자 안에서만</b> 정의 (다른 메소드에서 처음 만들면 호출 순서에 따라 오류).</div></div>
+<pre>class BankAccount:
+    _lastAssignedNumber = 1000           # 클래스 변수: 클래스에 단 하나
+    OVERDRAFT_FEE = 29.95                # 클래스 상수는 public 가능
+    def __init__(self):
+        self._balance = 0.0
+        BankAccount._lastAssignedNumber = BankAccount._lastAssignedNumber + 1
+        self._accountNumber = BankAccount._lastAssignedNumber</pre>
+<p>명명된 인자(Special Topic 9.1): <code>readIntBetween(low=-50, high=50, prompt="Temp:")</code> — 이름 지정 시 순서 무관.</p>
+
+<h3 id="c-design">클래스 테스트 · 설계 7단계</h3>
+<ul>
+<li><b>단위 테스트</b>: 클래스를 프로그램 바깥에서 격리해 테스트. ① 대화형 쉘 ② 테스터 프로그램</li>
+<li>테스터 4단계: 객체 생성 → 메소드 호출 → 결과 출력 → <b>기대 결과도 출력</b></li>
+</ul>
+<ol>
+<li>클래스의 책임을 문장으로 나열</li>
+<li>책임 → 구체적 메소드(공용 인터페이스)</li>
+<li>주석으로 공용 인터페이스 문서화</li>
+<li><b>메소드가 필요로 하는 정보를 바탕으로 인스턴스 변수 결정</b></li>
+<li>생성자 구현</li>
+<li>쉬운 것부터 메소드 구현</li>
+<li>테스터 프로그램으로 단위 테스트</li>
+</ol>
+<pre>class BankAccount:   # Worked Example 9.1
+    def withdraw(self, amount):
+        PENALTY = 10.0
+        if amount > self._balance:
+            self._balance = self._balance - PENALTY   # 잔고 부족 → 수수료만
+        else:
+            self._balance = self._balance - amount
+    def addInterest(self, rate):
+        self._balance = self._balance + self._balance * rate / 100.0
+# 1000 → deposit(500)=1500 → withdraw(2000)=1490 → addInterest(1.0)=1504.90</pre>
+<p><b>객체 추적</b>(9.8): 인덱스 카드 앞면=메소드(공용 인터페이스), 뒷면=인스턴스 변수 값. 설정자 실행마다 새 값 기록. 부가세 예: <code>CashRegister(7.5)</code>에 <code>_taxableTotal</code>, <code>_taxRate</code> 추가 → 세금 = taxableTotal × taxRate / 100.</p>
+
+<h3 id="c-pattern">객체 데이터를 위한 패턴 (9.9)</h3>
+<ol>
+<li><b>총합 유지</b>: 은행 잔고, 등록기 총액 (<code>_totalPrice += price</code>)</li>
+<li><b>이벤트 세기</b>: 물품 추가 횟수 (<code>_itemCount += 1</code>)</li>
+<li><b>값 모으기</b>: 리스트에 누적 (<code>self._choices = []</code>, <code>append</code>)</li>
+<li><b>속성 관리</b>: getName/setName. 바뀌면 안 되는 속성(학번)은 설정자를 제공하지 않음</li>
+<li><b>개별 상태 모델링</b>: Fish의 NOT_HUNGRY / VERY_HUNGRY</li>
+<li><b>위치 기술</b>: 행·열·방향 (<code>_row, _column, _direction</code>)</li>
+</ol>
+
+<h3 id="c-ref">객체 참조 (9.10)</h3>
+<ul>
+<li>변수는 객체 자체가 아니라 객체의 <b>메모리 주소</b>를 담음 = 객체를 <b>참조</b></li>
+<li><code>reg2 = reg1</code> → 같은 객체를 가리킴(<b>별칭, alias</b>). <code>reg2.addItem(2.95)</code> 하면 reg1도 count=1, total=2.95</li>
+<li><code>is / is not</code>: 데이터가 같은지가 아니라 <b>같은 객체인지</b> 검사. 데이터가 같아도 다른 객체면 별칭 아님</li>
+<li><b>None</b>: 아무 객체도 참조하지 않음. <code>if x is None:</code>. None ≠ 빈 문자열 <code>""</code>(길이 0인 유효한 문자열)</li>
+<li><code>reg = None; reg.getTotal()</code> → <b>AttributeError</b>: 'NoneType' object has no attribute 'getTotal'</li>
+<li>self로 자기 메소드 호출(<code>self.clear()</code>), self를 다른 메소드 인자로 전달 가능</li>
+<li>객체 생애: 참조가 하나라도 있으면 살아 있고, 없으면 <b>가비지 컬렉터</b>가 제거</li>
+</ul>
+
+<h3 id="c-frac">Fraction 클래스와 특별 메소드 (9.11)</h3>
+<ul>
+<li>실수는 정확히 표현 불가 → 정밀도가 중요하면 유리수. Fraction은 <b>불변</b> 객체</li>
+<li>0은 0/1로, 음수는 <b>분자만</b> 음수, 항상 <b>기약분수</b>(유클리드 호제법 gcd)</li>
+<li><code>Fraction(-2,-4)</code> → 1/2, <code>Fraction(0,15)</code> → 0/1, <code>Fraction(8,0)</code> → ZeroDivisionError</li>
+</ul>
+<div class="tbl"><table>
+<tr><th>표현식</th><th>특별 메소드</th><th>반환</th></tr>
+<tr><td><code>x + y</code></td><td><code>__add__(self, y)</code></td><td>객체</td></tr>
+<tr><td><code>x - y</code></td><td><code>__sub__(self, y)</code></td><td>객체</td></tr>
+<tr><td><code>x == y</code></td><td><code>__eq__(self, y)</code></td><td>bool</td></tr>
+<tr><td><code>x &lt; y</code></td><td><code>__lt__(self, y)</code></td><td>bool</td></tr>
+<tr><td><code>float(x)</code></td><td><code>__float__(self)</code></td><td>float</td></tr>
+<tr><td><code>str(x)</code>, <code>print(x)</code></td><td><code>__repr__(self)</code></td><td>문자열</td></tr>
+</table></div>
+<pre>def __add__(self, rhs):     # a/b + c/d = (a·d + b·c) / (b·d)
+    num = self._numerator * rhs._denominator + self._denominator * rhs._numerator
+    den = self._denominator * rhs._denominator
+    return Fraction(num, den)       # 새 객체 반환 (약분은 생성자가)
+
+def __lt__(self, rhs):      # a/b &lt; c/d ⇔ a·d &lt; c·b
+    return self._numerator * rhs._denominator &lt; self._denominator * rhs._numerator
+
+# ==, &lt; 만 있으면 나머지 유도
+def __ne__(self, rhs): return not self == rhs
+def __le__(self, rhs): return not rhs &lt; self
+def __gt__(self, rhs): return rhs &lt; self
+def __ge__(self, rhs): return not self &lt; rhs
+
+def __repr__(self):
+    return str(self._numerator) + "/" + str(self._denominator)</pre>
+<p>특별 메소드는 이중 밑줄로 시작·끝나며 <b>직접 호출하지 않음</b> — 연산자가 자동 호출. 의미 있을 때만 정의.</p>
+
+<!-- ======================= 10 ======================= -->
+<h2 id="inherit">10장 상속 <span class="tag o">교재 10장</span></h2>
+<p class="lead">Week6. Chapter 10. 상속.pdf</p>
+
+<h3 id="i-basic">상속 계층</h3>
+<ul>
+<li><b>상속</b>: 일반적인 클래스(<b>상위, superclass</b>)와 특수화된 클래스(<b>하위, subclass</b>) 사이의 관계. 하위는 상위의 데이터·동작을 물려받음</li>
+<li><b>대체 원리</b>: 상위 클래스 객체 자리에 하위 클래스 객체를 <b>언제나</b> 쓸 수 있다 (반대는 불가)</li>
+<li>상속 다이어그램의 화살표는 언제나 <b>상위 클래스를 향함</b></li>
+<li>명시적 상위 클래스가 없으면 자동으로 <b><code>object</code></b>를 상속. <code>print(q)</code> 기본 → <code>&lt;questions.Question object at 0x...&gt;</code> → <code>__repr__</code> 오버라이드로 개선</li>
+<li><b>Tip 10.1</b>: <b>값</b>만 다르면 인스턴스 변수(단일 클래스), <b>동작</b>이 다르면 하위 클래스 (하이브리드 자동차에 HybridCar 클래스는 보통 불필요)</li>
+<li><b>CE 10.1</b>: ChoiceQuestion이 더 크고 능력이 많은데 왜 '하위'? → 집합론: ChoiceQuestion 집합은 Question 집합의 <b>부분집합</b></li>
+</ul>
+<pre>class Question:
+    def __init__(self):
+        self._text = ""
+        self._answer = ""
+    def setText(self, questionText): self._text = questionText
+    def setAnswer(self, correctResponse): self._answer = correctResponse
+    def checkAnswer(self, response): return response == self._answer
+    def display(self): print(self._text)</pre>
+
+<h3 id="i-sub">하위 클래스 구현과 super()</h3>
+<pre>class ChoiceQuestion(Question):       # 괄호 = 상속받는 상위 클래스
+    def __init__(self):
+        super().__init__()            # 상위 생성자를 먼저 호출!
+        self._choices = []            # 하위에서 추가된 변수
+
+    def addChoice(self, choice, correct):     # 추가 메소드
+        self._choices.append(choice)
+        if correct:
+            choiceString = str(len(self._choices))
+            self.setAnswer(choiceString)      # 상위의 private _answer는 공용 인터페이스로!
+
+    def display(self):                # 오버라이드 (확장)
+        super().display()
+        for i in range(len(self._choices)):
+            print("%d: %s" % (i + 1, self._choices[i]))</pre>
+<ul>
+<li>ChoiceQuestion이 다른 점: ① 선택 항목 저장 ② 선택 항목 추가 메소드 ③ display 오버라이드</li>
+<li>하위 객체는 상위의 인스턴스 변수(<code>_text, _answer</code>)를 자동으로 가짐 + 오버라이드하지 않은 메소드 모두 상속</li>
+<li>상위 클래스는 <b>자기 인스턴스 변수를 정의할 책임</b> → 하위 생성자는 <code>super().__init__(…)</code>로 <b>명시적으로, 먼저</b> 호출</li>
+</ul>
+<pre>class Vehicle:
+    def __init__(self, numberOfTires):
+        self._numberOfTires = numberOfTires
+class Car(Vehicle):
+    def __init__(self):
+        super().__init__(4)           # 인자 전달
+        self._plateNumber = "??????"
+# Car 생성: Car{} → Car{_numberOfTires=4} → Car{_numberOfTires=4, _plateNumber="??????"}</pre>
+
+<h3 id="i-override">메소드 오버라이드</h3>
+<ul>
+<li><b>오버라이드</b>: 상속받은 메소드에 새 구현을 제공. 상위 동작을 <b>확장</b>하거나 <b>완전히 대체</b></li>
+</ul>
+<div class="callout warn"><span>⚠️</span><div><b>CE 10.2</b>: 같은 이름의 상위 메소드를 <code>self.display()</code>로 부르면 → self는 ChoiceQuestion 객체라 <b>자기 자신을 계속 호출 → 무한 재귀</b>. 반드시 <code>super().display()</code>.<br>예: Manager의 <code>getSalary</code>에서 <code>self.getSalary()</code> ✗ → <code>super().getSalary()</code> ✓</div></div>
+
+<h3 id="i-poly">다형성 (10.5)</h3>
+<pre>def presentQuestion(q):
+    q.display()                         # 실제 객체 타입에 맞는 display
+    response = input("Your answer: ")
+    print(q.checkAnswer(response))
+
+presentQuestion(ChoiceQuestion())       # OK — 대체 원리
+
+first = Question()
+addAllChoices(first, answers, correct)  # AttributeError — Question엔 addChoice 없음 (반대는 불가)</pre>
+<ul>
+<li><b>동적 메소드 검색</b>: 어떤 메소드가 호출될지는 <b>실행 시간에 실제 객체 타입</b>으로 결정</li>
+<li><b>다형성</b>("여러 형태"): 같은 요청을 여러 객체가 각자의 방식으로 수행 → 새 클래스(NumericQuestion)를 추가해도 presentQuestion은 <b>수정 불필요</b></li>
+<li><code>isinstance(q, Question)</code>: q가 Question <b>또는 그 하위 클래스</b>의 인스턴스면 True. 인자 검증에 사용 (<code>raise TypeError</code>)</li>
+<li><b>CE 10.3</b>: isinstance로 타입별 분기하지 말 것 → 새 클래스마다 분기 추가 필요. 상위에 메소드 선언 + 하위에서 오버라이드</li>
+<li><b>추상 메소드</b>: 구현 없이 하위가 구현하도록 강제. 하나라도 있으면 <b>추상 클래스</b>, 없으면 실제(concrete) 클래스. 파이썬 관례: <code>raise NotImplementedError</code></li>
+</ul>
+
+<h3 id="i-howto">상속 계층 작성 (HOW TO 10.1 · WE 10.1)</h3>
+<ol>
+<li>계층 클래스 나열 2. 상속 계층으로 조직 3. 공통 책임 결정 4. 오버라이드할 메소드 결정 5. 하위 클래스 공용 인터페이스 정의 6. 인스턴스 변수 찾기 7. 생성자·메소드 구현 8. 객체 생성·처리</li>
+</ol>
+<div class="tbl"><table>
+<tr><th>클래스</th><th>상위</th><th>인스턴스 변수</th><th>오버라이드</th></tr>
+<tr><td>BankAccount</td><td>—</td><td>_balance</td><td>—</td></tr>
+<tr><td>SavingsAccount</td><td>BankAccount</td><td>_interestRate, _minBalance</td><td>withdraw(최소잔고 추적), monthEnd(이자)</td></tr>
+<tr><td>CheckingAccount</td><td>BankAccount</td><td>_withdrawals</td><td>withdraw(3회 무료, 이후 $1), monthEnd(횟수 0)</td></tr>
+<tr><td>Employee</td><td>—</td><td>_name</td><td>getName은 공통</td></tr>
+<tr><td>HourlyEmployee</td><td>Employee</td><td>_hourlyWage</td><td>weeklyPay(40시간 초과분 1.5배)</td></tr>
+<tr><td>SalariedEmployee</td><td>Employee</td><td>_annualSalary</td><td>weeklyPay = 연봉/52</td></tr>
+<tr><td>Manager</td><td><b>SalariedEmployee</b></td><td>_weeklyBonus</td><td>weeklyPay = super().weeklyPay() + 보너스</td></tr>
+</table></div>
+<pre>def weeklyPay(self, hoursWorked):      # HourlyEmployee
+    pay = hoursWorked * self._hourlyWage
+    if hoursWorked > 40:
+        pay = pay + ((hoursWorked - 40) * 0.5) * self._hourlyWage
+    return pay
+class Manager(SalariedEmployee):
+    def __init__(self, name, salary, bonus):
+        super().__init__(name, salary)
+        self._weeklyBonus = bonus
+    def weeklyPay(self, hoursWorked):
+        return super().weeklyPay(hoursWorked) + self._weeklyBonus</pre>
+
+<h3 id="i-shape">기하학적 형상 계층 (10.6)</h3>
+<pre>GeometricShape
+ ├─ Line ── Arrow
+ ├─ Rectangle ── Square
+ ├─ Oval ── Circle
+ ├─ Polygon ── Triangle, RegularPolygon
+ └─ Group</pre>
+<ul>
+<li>GeometricShape: <code>_x, _y</code>(둘러싼 박스 왼쪽 위), <code>_fill</code>(None), <code>_outline</code>("black"). getWidth/getHeight 기본값 <b>0</b>. draw는 <b>색 설정</b>만 → 하위에서 <code>super().draw(canvas)</code> 후 실제 그리기</li>
+<li><b>Square</b>: <code>super().__init__(x, y, size, size)</code> — 더 편리한 인터페이스를 위해 다른 클래스를 감싸는 <b>포장 클래스(wrapper class)</b></li>
+<li><b>Line</b>: <code>super().__init__(min(x1,x2), min(y1,y2))</code> (더 작은 좌표가 왼쪽 위). width=<code>abs(endX-startX)</code>. moveBy 오버라이드로 시작·끝점도 이동</li>
+<li><b>Group</b>: 직접 그리지 않는 컨테이너. <code>getWidth = max(각 도형의 x + width)</code>. Group 안에 Group 가능</li>
+</ul>
+
+</article>
+</div>
+<footer>정리노트 · 기초프로그래밍 2 중간고사</footer>
+</body>
+</html>

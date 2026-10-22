@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>기초프로그래밍2 중간고사</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐍</text></svg>">
+<link rel="stylesheet" href="style.css">
+<script src="common.js"></script>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><i>Py</i><span>중간고사 대비</span></a>
+  <a class="tab on" href="index.html">홈</a>
+  <a class="tab" href="notes.html">정리노트</a>
+  <a class="tab" href="cram.html">암기노트</a>
+  <a class="tab" href="quiz.html">문제은행</a>
+  <button class="theme-btn" aria-label="테마 전환">🌙</button>
+</div></nav>
+
+<header class="hero">
+  <div class="dots" aria-hidden="true">
+    <span style="width:14px;height:14px;background:#ff64c8;top:18%;right:12%"></span>
+    <span style="width:22px;height:22px;background:#f5d75e;top:58%;right:22%"></span>
+    <span style="width:10px;height:10px;background:#2a9d99;top:30%;right:32%"></span>
+    <span style="width:18px;height:18px;background:#dd5b00;top:72%;right:6%"></span>
+    <span style="width:12px;height:12px;background:#7b3ff2;top:12%;right:44%"></span>
+  </div>
+  <div class="hero-in">
+    <div class="eyebrow">기초프로그래밍 2 · 중간고사</div>
+    <h1>파이썬 중간고사,<br>한 곳에서 끝내기.</h1>
+    <p>print 서식부터 클래스·상속·파일 입출력·예외 처리까지. 강의자료 6개를 정리노트, 암기노트, 문제은행으로 묶었습니다.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a class="btn btn-primary" href="quiz.html">문제 풀기 →</a>
+      <a class="btn btn-ghost-dark" href="notes.html">정리노트 보기</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <h2 class="section-title">공부 순서</h2>
+  <div class="grid">
+    <a class="card tint-lav" href="notes.html"><div class="ico">📘</div><h3>1. 정리노트</h3><p>주차별 강의 내용을 개념 → 코드 → 주의점 순으로 정리. 처음 훑어볼 때.</p></a>
+    <a class="card tint-yellow" href="cram.html"><div class="ico">🧠</div><h3>2. 암기노트</h3><p>시험 직전에 볼 핵심만. 정답 가리기 모드로 셀프 테스트.</p></a>
+    <a class="card tint-mint" href="quiz.html"><div class="ico">✍️</div><h3>3. 문제은행</h3><p>객관식·OX·출력 예측 문제. 단원별로 풀고 오답만 다시 풀기.</p></a>
+  </div>
+
+  <h2 class="section-title">시험 범위</h2>
+  <div class="grid">
+    <a class="card" href="notes.html#print"><span class="tag">1주</span><h3>print와 출력 서식</h3><p>명명 규칙, sep/end/file, % 서식, format, f-string, 이스케이프, 문자열 메소드</p></a>
+    <a class="card" href="notes.html#oddeven"><span class="tag">2주</span><h3>홀짝 합계 · 프로그래밍 기초</h3><p>5가지 풀이, O(n) vs O(1), 흔한 버그, 오류 3종류, 가변/불변, PEP 8, 디버깅</p></a>
+    <a class="card" href="notes.html#basics"><span class="tag">3주</span><h3>기본 문법 복습</h3><p>자료형, 연산자, 조건·반복문, 함수(*args, global, 재귀), list/tuple/set/dict</p></a>
+    <a class="card" href="notes.html#file"><span class="tag o">7장</span><h3>파일 입출력과 예외 처리</h3><p>open 모드, readline/read/readlines, split/strip, raise, try/except/else/finally, with</p></a>
+    <a class="card" href="notes.html#class"><span class="tag o">9장</span><h3>객체와 클래스</h3><p>캡슐화, 생성자, self, 설정자/접근자, 클래스 변수, 별칭·None, 특별 메소드, Fraction</p></a>
+    <a class="card" href="notes.html#inherit"><span class="tag o">10장</span><h3>상속</h3><p>상위/하위 클래스, super(), 오버라이드, 다형성, 동적 메소드 검색, 추상 클래스</p></a>
+  </div>
+
+  <div class="callout info" style="margin-top:40px"><span>ℹ️</span><div>강의자료에서 <b>“생략 가능 / 참고만 / 시험 범위 밖”</b>으로 표시된 부분(7.4 이진 파일 세부, 정규식, CSV, lorem·faker 같은 가짜 데이터 라이브러리)은 개념만 짧게 넣었습니다.</div></div>
+</main>
+<footer>강의자료 6개 기반 · 디자인은 awesome-design-md의 Notion DESIGN.md 참고</footer>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>중간고사 문제은행</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐍</text></svg>">
+<link rel="stylesheet" href="style.css">
+<script src="common.js"></script>
+<script src="questions.js"></script>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><i>Py</i><span>중간고사 대비</span></a>
+  <a class="tab" href="index.html">홈</a>
+  <a class="tab" href="notes.html">정리노트</a>
+  <a class="tab" href="cram.html">암기노트</a>
+  <a class="tab on" href="quiz.html">문제은행</a>
+  <button class="theme-btn" aria-label="테마 전환">🌙</button>
+</div></nav>
+
+<div class="page-head">
+  <div class="emoji">✍️</div>
+  <h1>문제은행</h1>
+  <p>객관식 · OX · 출력 예측. 출력 문제의 정답은 모두 실제 실행으로 검증했습니다.</p>
+</div>
+
+<main class="wrap">
+  <div class="qtools">
+    <div class="row"><span class="lbl">단원</span><div class="pills" id="fCh"></div></div>
+    <div class="row"><span class="lbl">유형</span><div class="pills" id="fT"></div></div>
+    <div class="row"><span class="lbl">모드</span><div class="pills" id="fM"></div>
+      <button class="pill" id="shuf">🔀 섞기</button>
+      <button class="pill" id="reset">기록 초기화</button></div>
+  </div>
+  <div class="score" id="score"></div>
+  <div class="progress"><i id="bar"></i></div>
+  <div id="stage"></div>
+  <div class="qlist" id="qlist"></div>
+</main>
+<footer>문제은행 · 풀이 기록은 이 브라우저에만 저장됩니다</footer>
+
+<script>
+const CH = { all: '전체', p: '1주 print', w2: '2주 홀짝·기초', w3: '3주 문법', f: '7장 파일·예외', c: '9장 클래스', i: '10장 상속' };
+const T = { all: '전체', mc: '객관식', ox: 'OX', out: '출력 예측' };
+const M = { all: '전체 문제', wrong: '틀린 문제만', new: '안 푼 문제' };
+const Q = window.QUESTIONS.map((q, id) => ({ ...q, id }));
+let rec = {}; try { rec = JSON.parse(localStorage.getItem('quizRec') || '{}'); } catch (e) {}
+const save = () => { try { localStorage.setItem('quizRec', JSON.stringify(rec)); } catch (e) {} };
+const st = { ch: 'all', t: 'all', m: 'all', order: null, idx: 0 };
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const norm = s => s.trim().replace(/\s+/g, ' ').replace(/"/g, "'");
+
+function pills(el, map, key) {
+  el.innerHTML = Object.entries(map).map(([k, v]) => `<button class="pill${st[key] === k ? ' on' : ''}" data-k="${k}">${v}</button>`).join('');
+  el.onclick = e => { const k = e.target.dataset.k; if (!k) return; st[key] = k; st.order = null; st.idx = 0; render(); };
+}
+function list() {
+  let l = Q.filter(q => (st.ch === 'all' || q.ch === st.ch) && (st.t === 'all' || q.t === st.t)
+    && (st.m === 'all' || (st.m === 'wrong' ? rec[q.id] === 0 : rec[q.id] === undefined)));
+  if (st.order) l = st.order.map(id => l.find(q => q.id === id)).filter(Boolean);
+  return l;
+}
+function render() {
+  pills(fCh, CH, 'ch'); pills(fT, T, 't'); pills(fM, M, 'm');
+  const l = list();
+  if (st.idx >= l.length) st.idx = Math.max(0, l.length - 1);
+  const done = l.filter(q => rec[q.id] !== undefined).length, right = l.filter(q => rec[q.id] === 1).length;
+  score.innerHTML = `<span>문제 <b>${l.length}</b></span><span>푼 문제 <b>${done}</b></span><span>정답 <b>${right}</b></span><span>정답률 <b>${done ? Math.round(right / done * 100) : 0}%</b></span>`;
+  bar.style.width = l.length ? (done / l.length * 100) + '%' : 0;
+  qlist.innerHTML = l.map((q, i) => `<button data-i="${i}" class="${rec[q.id] === 1 ? 'r' : rec[q.id] === 0 ? 'w' : ''}${i === st.idx ? ' cur' : ''}">${i + 1}</button>`).join('');
+  qlist.onclick = e => { if (e.target.dataset.i) { st.idx = +e.target.dataset.i; render(); } };
+  if (!l.length) { stage.innerHTML = `<div class="qcard"><p class="qtext">${st.m === 'wrong' ? '틀린 문제가 없어요 🎉' : '조건에 맞는 문제가 없어요.'}</p></div>`; return; }
+  show(l[st.idx], l);
+}
+function show(q, l) {
+  const code = q.code ? `<pre>${esc(q.code.join('\n'))}</pre>` : '';
+  let body = '';
+  if (q.t === 'mc') body = `<div class="opts">${q.opts.map((o, i) => `<button class="opt" data-a="${i}"><b>${'①②③④⑤'[i]}</b><span>${esc(o)}</span></button>`).join('')}</div>`;
+  if (q.t === 'ox') body = `<div class="opts" style="flex-direction:row">${['O', 'X'].map(o => `<button class="opt" style="flex:1;justify-content:center;font-size:22px;font-weight:700" data-a="${o === 'O'}">${o}</button>`).join('')}</div>`;
+  if (q.t === 'out') body = `<form id="af" style="display:flex;gap:8px;margin:16px 0"><input class="ans-in" id="ai" placeholder="출력 결과 입력" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="btn btn-primary">확인</button></form><button class="btn btn-sec" id="giveup" style="font-size:13px;padding:6px 12px">정답 보기</button>`;
+  stage.innerHTML = `<div class="qcard">
+    <div class="qmeta"><span class="tag">${CH[q.ch]}</span><span class="tag ${q.t === 'out' ? 'g' : 'o'}">${T[q.t]}</span><span>${st.idx + 1} / ${l.length}</span>${rec[q.id] === 0 ? '<span style="color:var(--error)">· 이전에 틀림</span>' : ''}</div>
+    <p class="qtext">${esc(q.q)}</p>${code}${body}<div id="exp"></div>
+    <div class="qnav"><button class="btn btn-sec" id="prev" ${st.idx ? '' : 'disabled'}>← 이전</button><button class="btn btn-primary" id="next" ${st.idx < l.length - 1 ? '' : 'disabled'}>다음 →</button></div></div>`;
+  const finish = (ok, shown) => {
+    rec[q.id] = ok ? 1 : 0; save();
+    const ans = q.t === 'mc' ? `${'①②③④⑤'[q.a]} ${q.opts[q.a]}` : q.t === 'ox' ? (q.a ? 'O' : 'X') : q.a;
+    exp.innerHTML = `<div class="explain ${ok ? 'ok' : 'no'}"><b>${ok ? '정답!' : '오답'}${ok ? '' : ` — 정답: <code>${esc(ans)}</code>`}</b>${esc(q.ex)}</div>`;
+    stage.querySelectorAll('.opt').forEach(b => { b.disabled = true; if (String(b.dataset.a) === String(q.a)) b.classList.add('right'); });
+    if (shown && shown.dataset.a !== String(q.a)) shown.classList.add('wrong');
+    const f = document.getElementById('af'); if (f) f.querySelectorAll('input,button').forEach(x => x.disabled = true);
+    const g = document.getElementById('giveup'); if (g) g.remove();
+    refreshMeta();
+  };
+  stage.querySelectorAll('.opt').forEach(b => b.onclick = () => finish(b.dataset.a === String(q.a), b));
+  const f = document.getElementById('af');
+  if (f) { f.onsubmit = e => { e.preventDefault(); if (ai.value.trim()) finish(norm(ai.value) === norm(q.a)); }; giveup.onclick = () => finish(false); ai.focus({ preventScroll: true }); }
+  prev.onclick = () => { st.idx--; render(); };
+  next.onclick = () => { st.idx++; render(); window.scrollTo({ top: stage.offsetTop - 160, behavior: 'smooth' }); };
+}
+// update score/list after answering without re-rendering the card
+function refreshMeta() {
+  const cur = st.idx, l = list();
+  const done = l.filter(q => rec[q.id] !== undefined).length, right = l.filter(q => rec[q.id] === 1).length;
+  score.innerHTML = `<span>문제 <b>${l.length}</b></span><span>푼 문제 <b>${done}</b></span><span>정답 <b>${right}</b></span><span>정답률 <b>${done ? Math.round(right / done * 100) : 0}%</b></span>`;
+  bar.style.width = l.length ? (done / l.length * 100) + '%' : 0;
+  qlist.querySelectorAll('button').forEach((b, i) => { const id = l[i] && l[i].id; b.className = (rec[id] === 1 ? 'r' : rec[id] === 0 ? 'w' : '') + (i === cur ? ' cur' : ''); });
+}
+shuf.onclick = () => { const ids = list().map(q => q.id); for (let i = ids.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [ids[i], ids[j]] = [ids[j], ids[i]]; } st.order = ids; st.idx = 0; render(); };
+reset.onclick = () => { if (confirm('풀이 기록을 모두 지울까요?')) { rec = {}; save(); render(); } };
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowRight' && !next.disabled) next.click();
+  if (e.key === 'ArrowLeft' && !prev.disabled) prev.click();
+  if (/^[1-5]$/.test(e.key)) { const o = stage.querySelectorAll('.opt')[e.key - 1]; if (o && !o.disabled) o.click(); }
+});
+render();
+</script>
+</body>
+</html>

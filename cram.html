@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>중간고사 암기노트</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐍</text></svg>">
+<link rel="stylesheet" href="style.css">
+<script src="common.js"></script>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><i>Py</i><span>중간고사 대비</span></a>
+  <a class="tab" href="index.html">홈</a>
+  <a class="tab" href="notes.html">정리노트</a>
+  <a class="tab on" href="cram.html">암기노트</a>
+  <a class="tab" href="quiz.html">문제은행</a>
+  <button class="theme-btn" aria-label="테마 전환">🌙</button>
+</div></nav>
+
+<div class="page-head">
+  <div class="emoji">🧠</div>
+  <h1>암기노트</h1>
+  <p>노란 형광펜이 외울 부분. <b>가리기</b>를 켜고 하나씩 눌러 확인하세요.</p>
+</div>
+
+<main class="wrap">
+<div class="cram-bar">
+  <button class="pill" id="hideBtn">🙈 정답 가리기</button>
+  <button class="pill" id="revealBtn">전부 보이기</button>
+  <span style="color:var(--steel);font-size:14px" id="cnt"></span>
+</div>
+
+<div class="cram-grid">
+
+<div class="cram-card tint-sky"><h3>🖨️ print 인자</h3><ul>
+<li><code>sep</code> 기본값 = <span class="blank">공백 ' '</span></li>
+<li><code>end</code> 기본값 = <span class="blank">'\n' (개행)</span></li>
+<li><code>print('a','b')</code> → <span class="blank">a b</span> / <code>print('a''b')</code> → <span class="blank">ab</span></li>
+<li><code>\</code> 줄 이어쓰기: 뒤에 <span class="blank">공백도 오면 안 됨</span></li>
+<li><code>'''…'''</code> = <span class="blank">입력한 그대로</span> 출력</li>
+<li>파일로 출력: <code>print(x, <span class="blank">file=f</span>)</code></li>
+</ul></div>
+
+<div class="cram-card tint-sky"><h3>🔢 서식</h3><ul>
+<li><code>%d</code> <span class="blank">정수</span> · <code>%f</code> <span class="blank">실수(소수 6자리)</span> · <code>%s</code> <span class="blank">문자열</span></li>
+<li><code>%5.2f</code> = 전체 폭 <span class="blank">5</span>, 소수점 <span class="blank">2</span>자리</li>
+<li><code>'%09d' % 123</code> → <span class="blank">000000123</span></li>
+<li><code>'{1} {0}'.format('a','b')</code> → <span class="blank">b a</span></li>
+<li><code>f"{x=}"</code> (x=1) → <span class="blank">x=1</span></li>
+<li><code>f"{1234567.89:,.2f}"</code> → <span class="blank">1,234,567.89</span></li>
+<li><code>f"{255:b}/{255:o}/{255:x}"</code> → <span class="blank">11111111/377/ff</span></li>
+<li><code>'Hi'.zfill(5)</code> → <span class="blank">000Hi</span>, <code>'hi you'.capitalize()</code> → <span class="blank">Hi you</span></li>
+</ul></div>
+
+<div class="cram-card"><h3>🏷️ 명명 규칙</h3><div class="tbl"><table>
+<tr><th>형태</th><th>이름</th><th>용도</th></tr>
+<tr><td><code>userId</code></td><td><span class="blank">카멜</span></td><td><span class="blank">JS·Java 변수</span></td></tr>
+<tr><td><code>UserId</code></td><td><span class="blank">파스칼</span></td><td><span class="blank">클래스</span></td></tr>
+<tr><td><code>user_id</code></td><td><span class="blank">스네이크</span></td><td><span class="blank">파이썬 변수/함수</span></td></tr>
+<tr><td><code>user-id</code></td><td><span class="blank">케밥</span></td><td><span class="blank">HTML/CSS</span></td></tr>
+<tr><td><code>MAX_VALUE</code></td><td><span class="blank">스크리밍 스네이크</span></td><td><span class="blank">상수</span></td></tr>
+<tr><td><code>strName</code></td><td><span class="blank">헝가리안</span></td><td><span class="blank">타입 접두사(퇴출)</span></td></tr>
+</table></div></div>
+
+<div class="cram-card tint-mint"><h3>➕ 홀짝 합계</h3><ul>
+<li>1~100 홀수 합 <span class="blank">2500</span>, 짝수 합 <span class="blank">2550</span>, 전체 <span class="blank">5050</span></li>
+<li>공식 <code>n*(n+1)//2</code> → 시간 <span class="blank">O(1)</span>, 반복문 → <span class="blank">O(n)</span></li>
+<li>필터링은 길이 <span class="blank">줄어듦</span>, 마스킹은 길이 <span class="blank">유지(0 채움)</span></li>
+<li>성능 측정 모듈: <span class="blank">timeit</span></li>
+<li>4대 버그: <span class="blank">off-by-one, = vs ==, 초기화 누락, / vs //</span></li>
+</ul></div>
+
+<div class="cram-card tint-mint"><h3>🐞 오류 · 디버깅</h3><ul>
+<li>콜론 누락 → <span class="blank">문법 오류</span></li>
+<li>&gt;= 대신 &gt; → <span class="blank">논리 오류</span></li>
+<li><code>if data = 100:</code> → <span class="blank">의미 오류</span></li>
+<li>프로그램 삼요소: <span class="blank">문법 · 알고리즘 · 디버깅</span></li>
+<li>구조: <span class="blank">입력 → 처리 → 출력</span></li>
+<li>트레이스백은 <span class="blank">아래에서 위로</span> 읽기</li>
+<li>대화형 디버거: <span class="blank">breakpoint()</span></li>
+<li><code>if __name__ == "__main__":</code> = <span class="blank">직접 실행될 때만</span> main 실행</li>
+<li>PEP 8 들여쓰기 = <span class="blank">공백 4칸</span></li>
+</ul></div>
+
+<div class="cram-card tint-yellow"><h3>🧮 연산자 함정</h3><ul>
+<li><code>7 / 2</code> → <span class="blank">3.5</span>, <code>7 // 2</code> → <span class="blank">3</span>, <code>7 % 2</code> → <span class="blank">1</span></li>
+<li><code>100 / 2</code> → <span class="blank">50.0 (float)</span></li>
+<li><code>-7 % 3</code> → <span class="blank">2</span> (부호는 <span class="blank">제수</span>를 따름)</li>
+<li><code>-7 // 3</code> → <span class="blank">-3</span> (내림)</li>
+<li><code>2 + 3 * 4</code> → <span class="blank">14</span>, <code>2 ** 3 ** 2</code> → <span class="blank">512</span></li>
+<li>우선순위: <span class="blank">** &gt; * / // % &gt; + -</span></li>
+<li><code>int(True)</code> → <span class="blank">1</span>, <code>bool(0)</code> → <span class="blank">False</span></li>
+<li><code>"*" * 3</code> → <span class="blank">'***'</span></li>
+</ul></div>
+
+<div class="cram-card tint-yellow"><h3>🔁 제어문</h3><ul>
+<li><code>range(1, 6)</code> → <span class="blank">1 2 3 4 5</span> (stop <span class="blank">미포함</span>)</li>
+<li><code>range(0, 10, 2)</code> → <span class="blank">0 2 4 6 8</span></li>
+<li>break = <span class="blank">반복문 종료</span>, continue = <span class="blank">이번 반복만 건너뜀</span></li>
+<li>for-else의 else: <span class="blank">break 없이 끝났을 때</span> 실행</li>
+<li>elif: 앞 조건이 True면 <span class="blank">나머지 검사 안 함</span></li>
+<li>윤년: <span class="blank">(4의 배수 and 100의 배수 아님) or 400의 배수</span></li>
+</ul></div>
+
+<div class="cram-card tint-lav"><h3>🧩 함수</h3><ul>
+<li><code>*args</code> → <span class="blank">튜플</span>, <code>**kwargs</code> → <span class="blank">딕셔너리</span></li>
+<li><code>return a, b</code> → <span class="blank">튜플</span>로 반환</li>
+<li>함수 안에서 전역 변수 수정: <span class="blank">global</span></li>
+<li>재귀 함수 필수: <span class="blank">종료 조건(base case)</span></li>
+<li><code>factorial(5)</code> → <span class="blank">120</span></li>
+<li><code>input()</code> 반환 타입: <span class="blank">항상 str</span></li>
+</ul></div>
+
+<div class="cram-card tint-lav"><h3>📦 자료구조</h3><div class="tbl"><table>
+<tr><th></th><th>순서</th><th>중복</th><th>변경</th></tr>
+<tr><td>list <code>[]</code></td><td><span class="blank">O</span></td><td><span class="blank">O</span></td><td><span class="blank">O</span></td></tr>
+<tr><td>tuple <code>()</code></td><td><span class="blank">O</span></td><td><span class="blank">O</span></td><td><span class="blank">X</span></td></tr>
+<tr><td>set <code>{}</code></td><td><span class="blank">X</span></td><td><span class="blank">X</span></td><td><span class="blank">O</span></td></tr>
+<tr><td>dict <code>{k:v}</code></td><td><span class="blank">O (3.7~)</span></td><td><span class="blank">키 X</span></td><td><span class="blank">O</span></td></tr>
+</table></div><ul>
+<li>가변: <span class="blank">list, dict, set</span> / 불변: <span class="blank">int, float, str, tuple, bool</span></li>
+<li><code>b = a; b.append(4)</code> → a는 <span class="blank">같이 바뀜</span></li>
+<li>{1,2,3} | {2,3,4} = <span class="blank">{1,2,3,4}</span>, &amp; = <span class="blank">{2,3}</span>, - = <span class="blank">{1}</span></li>
+<li>없는 키 안전 조회: <span class="blank">d.get(키, 기본값)</span></li>
+<li><code>[n**2 for n in range(5)]</code> → <span class="blank">[0, 1, 4, 9, 16]</span></li>
+<li><code>nums.remove(1)</code> = <span class="blank">첫 번째 1만</span> 제거</li>
+</ul></div>
+
+<div class="cram-card tint-peach"><h3>📂 파일 (7장)</h3><ul>
+<li><code>"r"</code> <span class="blank">읽기(파일 있어야 함)</span>, <code>"w"</code> <span class="blank">쓰기(기존 내용 삭제)</span>, <code>"a"</code> <span class="blank">추가</span></li>
+<li><code>"rb"</code>/<code>"wb"</code> = <span class="blank">이진 파일</span></li>
+<li>readline()이 EOF에서 반환: <span class="blank">빈 문자열 ""</span></li>
+<li>readline() 결과는 <span class="blank">\n 포함</span></li>
+<li>read() <span class="blank">전체 문자열</span> · readline() <span class="blank">한 줄</span> · readlines() <span class="blank">줄 리스트</span></li>
+<li>write()는 줄바꿈 <span class="blank">자동 추가 안 함</span>, 인자는 <span class="blank">문자열 하나</span></li>
+<li>빈 줄 생김 방지: <span class="blank">rstrip()</span></li>
+<li>Windows 경로: <span class="blank">r"c:\dir\f.txt"</span> 또는 <span class="blank">\\</span></li>
+<li>오른쪽에서 1번만 분리: <span class="blank">rsplit(" ", 1)</span></li>
+<li><code>ord("A")</code> → <span class="blank">65</span>, <code>chr(97)</code> → <span class="blank">'a'</span></li>
+<li>위치 이동 <span class="blank">seek()</span>, 현재 위치 <span class="blank">tell()</span></li>
+<li><code>sys.argv[0]</code> = <span class="blank">스크립트 이름</span>, 실제 인자는 <span class="blank">1번</span>부터</li>
+</ul></div>
+
+<div class="cram-card tint-peach"><h3>🚨 예외 (7장)</h3><ul>
+<li>오류 대응 두 측면: <span class="blank">감지(detection)와 처리(handling)</span></li>
+<li>예외 발생 키워드: <span class="blank">raise</span></li>
+<li>항상 실행되는 절: <span class="blank">finally</span></li>
+<li>예외 없을 때만: <span class="blank">else</span></li>
+<li>순서: <span class="blank">try → except → else → finally</span></li>
+<li>except 여러 개면 <span class="blank">구체적인 것 먼저</span></li>
+<li>처리 안 된 예외는 호출자로 <span class="blank">전파(propagate)</span></li>
+<li>Tip 7.1: 문제 제기는 <span class="blank">일찍</span>, 처리는 <span class="blank">늦게</span></li>
+<li>Tip 7.2: 같은 try에 <span class="blank">except와 finally 함께 쓰지 않기</span></li>
+<li>with문 = <span class="blank">try/finally</span>를 자동화</li>
+<li>사용자 정의 예외는 <span class="blank">Exception</span> 상속</li>
+<li>없는 파일 <span class="blank">IOError</span>, int("abc") <span class="blank">ValueError</span>, 데이터 초과 <span class="blank">RuntimeError(직접 raise)</span></li>
+<li>0으로 나누기 <span class="blank">ZeroDivisionError</span>, 없는 키 <span class="blank">KeyError</span>, 인덱스 초과 <span class="blank">IndexError</span></li>
+</ul></div>
+
+<div class="cram-card tint-rose"><h3>🏛️ 클래스 기본 (9장)</h3><ul>
+<li>캡슐화 = 공용 인터페이스는 제공, <span class="blank">구현 세부는 숨김</span></li>
+<li>공용 인터페이스 = <span class="blank">클래스가 제공하는 모든 메소드의 집합</span></li>
+<li>생성자 이름: <span class="blank">__init__</span>, 클래스당 <span class="blank">하나</span></li>
+<li>메소드 첫 파라미터: <span class="blank">self</span> (호출 대상 객체, 자동 전달)</li>
+<li>private 관례: 이름 앞 <span class="blank">밑줄 _</span> (강제 <span class="blank">X</span>)</li>
+<li>설정자(mutator) = 객체를 <span class="blank">수정</span> (addItem, clear)</li>
+<li>접근자(accessor) = <span class="blank">수정 없이 조회</span> (getTotal)</li>
+<li>Tip 9.1: 인스턴스 변수 <span class="blank">private</span>, 메소드 <span class="blank">public</span></li>
+<li>Tip 9.2: 인스턴스 변수는 <span class="blank">생성자 안에서만</span> 정의</li>
+<li>CE 9.1: <span class="blank">생성자를 직접 다시 호출하지 말 것</span></li>
+<li>클래스 변수 = <span class="blank">클래스에 단 하나</span>, 모든 객체 공유</li>
+</ul></div>
+
+<div class="cram-card tint-rose"><h3>🔗 설계 · 참조 (9장)</h3><ul>
+<li>설계 7단계 중 인스턴스 변수 결정 = <span class="blank">4단계</span> (메소드가 필요로 하는 정보 기준)</li>
+<li>테스터 4단계: 생성 → 호출 → 출력 → <span class="blank">기대 결과 출력</span></li>
+<li>단위 테스트 = 클래스를 <span class="blank">격리</span>해서 테스트</li>
+<li>객체 추적 카드: 앞면 <span class="blank">메소드</span>, 뒷면 <span class="blank">인스턴스 변수</span></li>
+<li>변수는 객체의 <span class="blank">메모리 주소</span>를 담음(참조)</li>
+<li>같은 객체를 가리키는 두 변수 = <span class="blank">별칭(alias)</span></li>
+<li>같은 객체인지 검사: <span class="blank">is / is not</span></li>
+<li>None 객체의 메소드 호출 → <span class="blank">AttributeError</span></li>
+<li>참조 없는 객체 제거: <span class="blank">가비지 컬렉터</span></li>
+<li>BankAccount 1000→+500→출금2000→이자1% = <span class="blank">1504.90</span></li>
+</ul></div>
+
+<div class="cram-card tint-rose"><h3>➗ Fraction · 특별 메소드</h3><ul>
+<li><code>x + y</code> → <span class="blank">__add__</span>, <code>x == y</code> → <span class="blank">__eq__</span>, <code>x &lt; y</code> → <span class="blank">__lt__</span></li>
+<li><code>float(x)</code> → <span class="blank">__float__</span>, <code>print(x)</code> → <span class="blank">__repr__</span></li>
+<li>__eq__, __lt__로 유도 가능: <span class="blank">!=, &lt;=, &gt;, &gt;=</span></li>
+<li><code>x &gt;= y</code> ⇔ <span class="blank">not x &lt; y</span>, <code>x &gt; y</code> ⇔ <span class="blank">y &lt; x</span></li>
+<li>Fraction(-2, -4) → <span class="blank">1/2</span>, Fraction(0, 15) → <span class="blank">0/1</span>, Fraction(2, -8) → <span class="blank">-1/4</span></li>
+<li>분모 0 → <span class="blank">ZeroDivisionError</span></li>
+<li>약분 알고리즘: <span class="blank">유클리드 호제법(gcd)</span></li>
+<li>Fraction은 <span class="blank">불변</span> → 연산은 <span class="blank">새 객체</span> 반환</li>
+</ul></div>
+
+<div class="cram-card tint-cream"><h3>🌳 상속 기본 (10장)</h3><ul>
+<li>상속 문법: <code>class Sub<span class="blank">(Super)</span>:</code></li>
+<li>대체 원리: <span class="blank">상위 자리에 하위</span> 객체 사용 가능 (반대 <span class="blank">불가</span>)</li>
+<li>다이어그램 화살표는 <span class="blank">상위 클래스</span>를 향함</li>
+<li>모든 클래스의 뿌리: <span class="blank">object</span></li>
+<li>하위 생성자에서 가장 먼저: <span class="blank">super().__init__()</span></li>
+<li>상위 private 변수는 <span class="blank">공용 인터페이스(setAnswer 등)</span>로 접근</li>
+<li>'하위'인 이유: 집합론의 <span class="blank">부분집합</span></li>
+<li>값만 다르면 <span class="blank">인스턴스 변수</span>, 동작이 다르면 <span class="blank">하위 클래스</span></li>
+<li>같은 이름 상위 메소드를 self로 호출 → <span class="blank">무한 재귀</span></li>
+</ul></div>
+
+<div class="cram-card tint-cream"><h3>🎭 다형성 · 추상 (10장)</h3><ul>
+<li>오버라이드 = 상속받은 메소드에 <span class="blank">새 구현 제공</span></li>
+<li>호출될 메소드가 실행 시간에 실제 타입으로 결정 = <span class="blank">동적 메소드 검색</span></li>
+<li>다형성 = <span class="blank">"여러 형태"</span>, 같은 요청을 각자의 방식으로</li>
+<li>새 문제 유형 추가 시 presentQuestion은 <span class="blank">수정 불필요</span></li>
+<li><code>isinstance(q, Question)</code>: <span class="blank">하위 클래스</span> 인스턴스도 True</li>
+<li>CE 10.3: <span class="blank">isinstance 타입 테스트로 분기하지 말 것</span></li>
+<li>추상 메소드 표현 관례: <span class="blank">raise NotImplementedError</span></li>
+<li>추상 메소드 1개 이상 = <span class="blank">추상 클래스</span>, 없으면 <span class="blank">실제(concrete) 클래스</span></li>
+</ul></div>
+
+<div class="cram-card tint-cream"><h3>🏗️ 계층 예제 (10장)</h3><ul>
+<li>Manager의 상위 클래스: <span class="blank">SalariedEmployee</span></li>
+<li>SalariedEmployee.weeklyPay = <span class="blank">연봉 / 52</span></li>
+<li>시간제 40시간 초과분 = <span class="blank">1.5배</span></li>
+<li>Manager.weeklyPay = <span class="blank">super().weeklyPay() + 보너스</span></li>
+<li>CheckingAccount: 월 <span class="blank">3회</span> 무료, 이후 <span class="blank">$1</span></li>
+<li>SavingsAccount 이자 기준: <span class="blank">그달 최소 잔고</span></li>
+<li>Square = <span class="blank">포장(wrapper) 클래스</span>, <code>super().__init__(x, y, <span class="blank">size, size</span>)</code></li>
+<li>GeometricShape getWidth 기본값: <span class="blank">0</span></li>
+<li>Line 왼쪽 위: <span class="blank">min(x1,x2), min(y1,y2)</span></li>
+<li>Group getWidth = <span class="blank">max(각 도형 x + width)</span></li>
+</ul></div>
+
+</div>
+</main>
+<footer>암기노트 · 클릭하면 하나씩 공개</footer>
+<script>
+const blanks = document.querySelectorAll('.blank');
+const cnt = document.getElementById('cnt');
+const upd = () => { cnt.textContent = document.body.classList.contains('hide-ans') ? `${document.querySelectorAll('.blank.show').length} / ${blanks.length} 공개` : `빈칸 ${blanks.length}개`; };
+const hideBtn = document.getElementById('hideBtn');
+hideBtn.onclick = () => { document.body.classList.toggle('hide-ans'); hideBtn.classList.toggle('on'); blanks.forEach(b => b.classList.remove('show')); upd(); };
+document.getElementById('revealBtn').onclick = () => { blanks.forEach(b => b.classList.add('show')); upd(); };
+blanks.forEach(b => b.onclick = () => { if (document.body.classList.contains('hide-ans')) { b.classList.toggle('show'); upd(); } });
+upd();
+</script>
+</body>
+</html>
